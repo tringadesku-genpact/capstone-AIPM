@@ -1,0 +1,19 @@
+{
+    "bundle_id": "bundle_metric_drop_v1",
+    "product": {
+      "name": "FlowPay",
+      "region": "EU",
+      "handles_pii": true
+    },
+    "request_type": "metric_drop",
+    "problem_statement": "Mobile conversion dropped 25% in 2 weeks.",
+    "tickets_raw": [],
+    "customer_notes_raw": [],
+    "metrics_snapshot": {
+      "mobile_conversion_current": 0.024,
+      "mobile_conversion_previous": 0.032
+    },
+    "documents_raw": [],
+    "competitor_info": [],
+    "proposal_details": {}
+  }

@@ -1,0 +1,33 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "ContextPacket",
+    "type": "object",
+    "required": [
+      "bundle_id",
+      "product",
+      "request_type",
+      "problem_statement",
+      "normalized_tickets",
+      "normalized_notes",
+      "normalized_docs",
+      "metrics_snapshot",
+      "hotspots",
+      "missing_info",
+      "ignore_rules_applied",
+      "evidence_index"
+    ],
+    "properties": {
+      "bundle_id": { "type": "string" },
+      "product": { "type": "object" },
+      "request_type": { "type": "string" },
+      "problem_statement": { "type": "string" },
+      "normalized_tickets": { "type": "array", "items": { "type": "object" } },
+      "normalized_notes": { "type": "array", "items": { "type": "object" } },
+      "normalized_docs": { "type": "array", "items": { "type": "object" } },
+      "metrics_snapshot": { "type": "object" },
+      "hotspots": { "type": "array", "items": { "type": "string" } },
+      "missing_info": { "type": "array", "items": { "type": "string" } },
+      "ignore_rules_applied": { "type": "array", "items": { "type": "string" } },
+      "evidence_index": { "type": "object" }
+    }
+  }

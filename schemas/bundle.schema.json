@@ -1,0 +1,41 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "ProductBundle",
+    "type": "object",
+    "required": [
+      "bundle_id",
+      "product",
+      "request_type",
+      "problem_statement",
+      "tickets_raw",
+      "customer_notes_raw",
+      "metrics_snapshot",
+      "documents_raw",
+      "competitor_info",
+      "proposal_details"
+    ],
+    "properties": {
+      "bundle_id": { "type": "string" },
+      "product": {
+        "type": "object",
+        "required": ["name", "region", "handles_pii"],
+        "properties": {
+          "name": { "type": "string" },
+          "region": { "type": "string" },
+          "handles_pii": { "type": "boolean" }
+        }
+      },
+      "request_type": {
+        "type": "string",
+        "enum": ["metric_drop", "high_risk_idea", "competitive_parity", "other"]
+      },
+      "problem_statement": { "type": "string" },
+      "tickets_raw": { "type": "array", "items": { "type": "object" } },
+      "customer_notes_raw": { "type": "array", "items": { "type": "object" } },
+      "metrics_snapshot": { "type": "object" },
+      "documents_raw": { "type": "array", "items": { "type": "object" } },
+      "competitor_info": { "type": "array", "items": { "type": "object" } },
+      "proposal_details": { "type": "object" }
+    },
+    "additionalProperties": false
+  }

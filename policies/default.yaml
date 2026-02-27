@@ -1,0 +1,13 @@
+version: 1
+
+privacy:
+  pii_requires_validate_first: true
+
+ignore_rules:
+  ignore_labels: ["wontfix", "duplicate"]
+  ignore_priorities: ["P4"]
+
+hotspot_keywords:
+  privacy: ["pii", "gdpr", "tracking"]
+  auth: ["login", "password"]
+  pricing: ["billing", "subscription"]

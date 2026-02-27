@@ -1,0 +1,26 @@
+{
+    "title": "Finding",
+    "type": "object",
+    "required": [
+      "id",
+      "agent",
+      "type",
+      "impact",
+      "confidence",
+      "summary",
+      "recommendation",
+      "evidence",
+      "assumptions"
+    ],
+    "properties": {
+      "id": { "type": "string" },
+      "agent": { "type": "string" },
+      "type": { "type": "string" },
+      "impact": { "type": "string", "enum": ["high", "medium", "low"] },
+      "confidence": { "type": "number" },
+      "summary": { "type": "string" },
+      "recommendation": { "type": "string" },
+      "evidence": { "type": "array", "items": { "type": "string" } },
+      "assumptions": { "type": "array", "items": { "type": "string" } }
+    }
+  }
