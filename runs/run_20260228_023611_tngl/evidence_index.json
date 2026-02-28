@@ -1,0 +1,41 @@
+{
+  "tickets": {
+    "FP-401": {
+      "id": "FP-401",
+      "type": "story",
+      "priority": "P1",
+      "title": "Add 1-click checkout option",
+      "labels": [
+        "checkout",
+        "growth"
+      ]
+    },
+    "FP-403": {
+      "id": "FP-403",
+      "type": "task",
+      "priority": "P2",
+      "title": "Update pricing page messaging for new checkout",
+      "labels": [
+        "pricing",
+        "billing"
+      ]
+    }
+  },
+  "notes": {
+    "1": {
+      "source": "exec",
+      "text": "We must match competitor or we risk churn."
+    }
+  },
+  "docs": {
+    "1": {
+      "id": "DOC-31",
+      "title": "Competitor note",
+      "snippet": "Competitor X: 1-click checkout + saved payment method."
+    }
+  },
+  "metrics_keys": [
+    "checkout_start_rate",
+    "checkout_complete_rate"
+  ]
+}

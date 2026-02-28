@@ -1,0 +1,19 @@
+{
+  "bundle_id": "bundle_accessibility_gap",
+  "product": { "name": "FlowPay", "region": "EU", "handles_pii": true },
+  "request_type": "other",
+  "problem_statement": "After UI redesign, keyboard navigation and screen reader flow seem broken on login/checkout.",
+  "tickets_raw": [
+    { "id": "FP-601", "title": "Screen reader labels missing on login form", "type": "Bug", "priority": "high", "labels": ["accessibility", "auth"] },
+    { "id": "FP-602", "title": "Keyboard focus order broken on checkout", "type": "Bug", "priority": "medium", "labels": ["accessibility", "checkout"] }
+  ],
+  "customer_notes_raw": [
+    { "source": "support", "text": "Users with screen readers cannot complete login." }
+  ],
+  "metrics_snapshot": { "login_error_rate_current": 0.029, "login_error_rate_previous": 0.012 },
+  "documents_raw": [
+    { "id": "DOC-51", "title": "A11y note", "text": "WCAG basics: labels, focus order, contrast. Re-test after redesign." }
+  ],
+  "competitor_info": [],
+  "proposal_details": {}
+}

@@ -1,0 +1,59 @@
+{
+  "tickets": {
+    "FP-201": {
+      "id": "FP-201",
+      "type": "bug",
+      "priority": "P3",
+      "title": "Login stuck after SSO redirect on iPhone",
+      "labels": [
+        "auth",
+        "login",
+        "mobile"
+      ]
+    },
+    "FP-202": {
+      "id": "FP-202",
+      "type": "story",
+      "priority": "P2",
+      "title": "Add consent banner (GDPR) for tracking events",
+      "labels": [
+        "privacy",
+        "gdpr",
+        "tracking"
+      ]
+    },
+    "FP-204": {
+      "id": "FP-204",
+      "type": "task",
+      "priority": "P1",
+      "title": "Tracking event missing on checkout submit",
+      "labels": [
+        "analytics",
+        "tracking"
+      ]
+    }
+  },
+  "notes": {
+    "1": {
+      "source": "support",
+      "text": "Can't login on mobile, keeps looping."
+    },
+    "2": {
+      "source": "nps",
+      "text": "Feels slower and I don't like being tracked without consent."
+    }
+  },
+  "docs": {
+    "1": {
+      "id": "DOC-11",
+      "title": "Release note snippet",
+      "snippet": "Updated SSO redirect flow. Added new tracking hooks on checkout."
+    }
+  },
+  "metrics_keys": [
+    "mobile_conversion_current",
+    "mobile_conversion_previous",
+    "checkout_latency_p95_ms_current",
+    "checkout_latency_p95_ms_previous"
+  ]
+}

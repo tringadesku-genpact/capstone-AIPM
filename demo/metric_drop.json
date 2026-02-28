@@ -1,19 +1,66 @@
 {
-    "bundle_id": "bundle_metric_drop_v1",
-    "product": {
-      "name": "FlowPay",
-      "region": "EU",
-      "handles_pii": true
+  "bundle_id": "bundle_metric_drop_raw",
+  "product": {
+    "name": "FlowPay",
+    "region": "EU",
+    "handles_pii": true
+  },
+  "request_type": "metric_drop",
+  "problem_statement": "Conversion dropped on mobile after last update. Users mention login + tracking concerns.",
+  "tickets_raw": [
+    {
+      "id": "FP-201",
+      "title": "Login stuck after SSO redirect on iPhone",
+      "type": "Bug",
+      "priority": "sev2",
+      "labels": "auth, login, mobile"
     },
-    "request_type": "metric_drop",
-    "problem_statement": "Mobile conversion dropped 25% in 2 weeks.",
-    "tickets_raw": [],
-    "customer_notes_raw": [],
-    "metrics_snapshot": {
-      "mobile_conversion_current": 0.024,
-      "mobile_conversion_previous": 0.032
+    {
+      "id": "FP-202",
+      "title": "Add consent banner (GDPR) for tracking events",
+      "type": "Story",
+      "priority": "medium",
+      "labels": ["privacy", "gdpr", "tracking"]
     },
-    "documents_raw": [],
-    "competitor_info": [],
-    "proposal_details": {}
-  }
+    {
+      "id": "FP-203",
+      "title": "Tiny UI spacing on settings page",
+      "type": "bug",
+      "priority": "P4",
+      "labels": ["ui"]
+    },
+    {
+      "id": "FP-204",
+      "title": "Tracking event missing on checkout submit",
+      "type": "Task",
+      "priority": "high",
+      "labels": ["analytics", "tracking"]
+    },
+    {
+      "id": "FP-205",
+      "title": "Old request: change theme colors",
+      "type": "Story",
+      "priority": "low",
+      "labels": ["wontfix"]
+    }
+  ],
+  "customer_notes_raw": [
+    { "source": "support", "text": "Can't login on mobile, keeps looping." },
+    { "source": "nps", "text": "Feels slower and I don't like being tracked without consent." }
+  ],
+  "metrics_snapshot": {
+    "mobile_conversion_current": 0.021,
+    "mobile_conversion_previous": 0.030,
+    "checkout_latency_p95_ms_current": 1550,
+    "checkout_latency_p95_ms_previous": 980
+  },
+  "documents_raw": [
+    {
+      "id": "DOC-11",
+      "title": "Release note snippet",
+      "text": "Updated SSO redirect flow. Added new tracking hooks on checkout."
+    }
+  ],
+  "competitor_info": [],
+  "proposal_details": {}
+}

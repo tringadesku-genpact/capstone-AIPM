@@ -1,0 +1,23 @@
+{
+  "bundle_id": "bundle_competitive_parity",
+  "product": { "name": "FlowPay", "region": "EU", "handles_pii": true },
+  "request_type": "competitive_parity",
+  "problem_statement": "Competitor launched 1-click checkout. Leadership wants parity ASAP.",
+  "tickets_raw": [
+    { "id": "FP-401", "title": "Add 1-click checkout option", "type": "Story", "priority": "p1", "labels": ["checkout", "growth"] },
+    { "id": "FP-402", "title": "Add 1-click checkout option", "type": "Story", "priority": "high", "labels": ["duplicate"] },
+    { "id": "FP-403", "title": "Update pricing page messaging for new checkout", "type": "Task", "priority": "medium", "labels": ["pricing", "billing"] },
+    { "id": "FP-404", "title": "Old request: change button colors", "type": "Story", "priority": "low", "labels": ["wontfix"] }
+  ],
+  "customer_notes_raw": [
+    { "source": "exec", "text": "We must match competitor or we risk churn." }
+  ],
+  "metrics_snapshot": { "checkout_start_rate": 0.14, "checkout_complete_rate": 0.032 },
+  "documents_raw": [
+    { "id": "DOC-31", "title": "Competitor note", "text": "Competitor X: 1-click checkout + saved payment method." }
+  ],
+  "competitor_info": [
+    { "name": "PaySprint", "notes": "Released 1-click checkout with saved cards. Strong messaging on speed." }
+  ],
+  "proposal_details": {}
+}

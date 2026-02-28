@@ -1,0 +1,20 @@
+{
+  "bundle_id": "bundle_high_risk_privacy",
+  "product": { "name": "FlowPay", "region": "EU", "handles_pii": true },
+  "request_type": "high_risk_idea",
+  "problem_statement": "Idea: add cross-app tracking to improve personalization and re-targeting. Need to move fast.",
+  "tickets_raw": [
+    { "id": "FP-301", "title": "Implement user-level tracking across checkout + marketing", "type": "Story", "priority": "high", "labels": "tracking, privacy" },
+    { "id": "FP-302", "title": "Store device identifiers for attribution", "type": "Task", "priority": "sev1", "labels": ["pii", "gdpr"] },
+    { "id": "FP-303", "title": "Refactor CSS on landing page", "type": "Task", "priority": "P4", "labels": ["ui"] }
+  ],
+  "customer_notes_raw": [
+    { "source": "sales", "text": "Enterprise customer wants better targeting and attribution dashboards." }
+  ],
+  "metrics_snapshot": { "conversion_rate": 0.028, "churn_rate": 0.041 },
+  "documents_raw": [
+    { "id": "DOC-21", "title": "Privacy note", "text": "EU GDPR implications likely. Consent + data minimization required." }
+  ],
+  "competitor_info": [],
+  "proposal_details": { "summary": "Add new tracking, build attribution, personalize offers." }
+}

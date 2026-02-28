@@ -1,0 +1,96 @@
+{
+  "bundle_id": "bundle_competitive_parity",
+  "product": {
+    "name": "FlowPay",
+    "region": "EU",
+    "handles_pii": true
+  },
+  "request_type": "competitive_parity",
+  "problem_statement": "Competitor launched 1-click checkout. Leadership wants parity ASAP.",
+  "normalized_tickets": [
+    {
+      "id": "FP-401",
+      "type": "story",
+      "priority": "P1",
+      "title": "Add 1-click checkout option",
+      "labels": [
+        "checkout",
+        "growth"
+      ]
+    },
+    {
+      "id": "FP-403",
+      "type": "task",
+      "priority": "P2",
+      "title": "Update pricing page messaging for new checkout",
+      "labels": [
+        "pricing",
+        "billing"
+      ]
+    }
+  ],
+  "normalized_notes": [
+    {
+      "source": "exec",
+      "text": "We must match competitor or we risk churn."
+    }
+  ],
+  "normalized_docs": [
+    {
+      "id": "DOC-31",
+      "title": "Competitor note",
+      "snippet": "Competitor X: 1-click checkout + saved payment method."
+    }
+  ],
+  "metrics_snapshot": {
+    "checkout_start_rate": 0.14,
+    "checkout_complete_rate": 0.032
+  },
+  "hotspots": [],
+  "missing_info": [],
+  "ignore_rules_applied": [
+    "ignored_ticket:FP-402:label",
+    "ignored_ticket:FP-404:label"
+  ],
+  "evidence_index": {
+    "tickets": {
+      "FP-401": {
+        "id": "FP-401",
+        "type": "story",
+        "priority": "P1",
+        "title": "Add 1-click checkout option",
+        "labels": [
+          "checkout",
+          "growth"
+        ]
+      },
+      "FP-403": {
+        "id": "FP-403",
+        "type": "task",
+        "priority": "P2",
+        "title": "Update pricing page messaging for new checkout",
+        "labels": [
+          "pricing",
+          "billing"
+        ]
+      }
+    },
+    "notes": {
+      "1": {
+        "source": "exec",
+        "text": "We must match competitor or we risk churn."
+      }
+    },
+    "docs": {
+      "1": {
+        "id": "DOC-31",
+        "title": "Competitor note",
+        "snippet": "Competitor X: 1-click checkout + saved payment method."
+      }
+    },
+    "metrics_keys": [
+      "checkout_start_rate",
+      "checkout_complete_rate"
+    ]
+  }
+}
