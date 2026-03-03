@@ -117,15 +117,43 @@ def run(state):
 
     findings = []
 
+    # --- snapshot/ticket/doc references for evidence + missing-metric assumptions ---
+    snapshot = ctx.get("metrics_snapshot", {}) or {}
+    snapshot_keys = list(snapshot.keys())
+
+    tickets = ctx.get("normalized_tickets", []) or []
+    docs = ctx.get("normalized_docs", []) or []
+
+    ticket_id = tickets[0].get("id") if tickets else None
+    doc_id = docs[0].get("id") if docs else None
+
+    # Base evidence references (keep short and deterministic)
+    evidence = [f"metric:{k}" for k in snapshot_keys[:2]]
+    if ticket_id:
+        evidence.append(f"ticket:{ticket_id}")
+    if doc_id:
+        evidence.append(f"doc:{doc_id}")
+    evidence.append(f"request_type={ctx.get('request_type', '')}")
+
     # 1 - North Star
     rtype = ctx.get("request_type", "").lower().strip()
     framework = _FRAMEWORKS.get(rtype, _DEFAULT)
+
+    # assumptions for framework metrics missing from snapshot
+    assumptions_missing = []
+    for m in framework.get("input_metrics", []):
+        if m not in snapshot:
+            assumptions_missing.append(
+                f"Assumption: '{m}' baseline not provided in metrics_snapshot; needs instrumentation or data pull."
+            )
+
     findings.append(_finding(
         "north_star_proposal", "high", 0.75,
         f"North Star: {framework['north_star']}. Inputs: {', '.join(framework['input_metrics'])}.",
         f"Guardrails: {'; '.join(framework['guardrails'])}.",
-        [f"request_type={rtype}"],
+        evidence,
     ))
+    findings[-1]["assumptions"] = assumptions_missing
 
     # 2 - Event taxonomy
     events = _build_events(ctx)
@@ -133,7 +161,7 @@ def run(state):
         "event_taxonomy", "medium", 0.65,
         f"Proposed {len(events)} events: {', '.join(e['event_name'] for e in events)}.",
         "Review with eng before sprint.",
-        [f"request_type={rtype}"],
+        evidence,
     ))
 
     # 3 - Integrity
