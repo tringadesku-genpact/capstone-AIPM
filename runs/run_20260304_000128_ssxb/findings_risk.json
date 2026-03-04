@@ -1,0 +1,56 @@
+{
+  "agent": "G_risk",
+  "risk_summary": {
+    "score": 70,
+    "level": "high",
+    "reasons": [
+      "Handles PII \u2192 privacy/compliance exposure.",
+      "High-risk idea request type.",
+      "Missing info increases uncertainty (+5)."
+    ]
+  },
+  "findings": [
+    {
+      "id": "G-001",
+      "agent": "G_risk",
+      "type": "privacy_compliance",
+      "impact": "high",
+      "confidence": 0.6,
+      "summary": "Product handles PII which increases privacy and compliance risk for this change.",
+      "recommendation": "Add privacy review, minimize data collection, document retention/access controls, and ensure auditability.",
+      "evidence": [
+        "handles_pii=True",
+        "request_type=high_risk_idea"
+      ],
+      "assumptions": [
+        "Assumes PII is in the impacted flow unless proven otherwise."
+      ]
+    },
+    {
+      "id": "G-002",
+      "agent": "G_risk",
+      "type": "operational_reliability",
+      "impact": "high",
+      "confidence": 0.65,
+      "summary": "Hotspots detected (1): ['privacy']. These areas may carry elevated operational risk.",
+      "recommendation": "Use staged rollout, monitoring/alerts, and a rollback plan focused on hotspot flows.",
+      "evidence": [
+        "hotspots=['privacy']"
+      ],
+      "assumptions": []
+    },
+    {
+      "id": "G-003",
+      "agent": "G_risk",
+      "type": "unknowns",
+      "impact": "high",
+      "confidence": 0.7,
+      "summary": "Key information is missing, increasing decision risk and lowering confidence.",
+      "recommendation": "Block full rollout until missing items are provided and validated; re-run pipeline afterwards.",
+      "evidence": [
+        "missing_info=['Missing data_items for high-risk idea.']"
+      ],
+      "assumptions": []
+    }
+  ]
+}

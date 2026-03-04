@@ -1,0 +1,41 @@
+{
+  "tickets": {
+    "FP-301": {
+      "id": "FP-301",
+      "type": "story",
+      "priority": "P1",
+      "title": "Implement user-level tracking across checkout + marketing",
+      "labels": [
+        "tracking",
+        "privacy"
+      ]
+    },
+    "FP-302": {
+      "id": "FP-302",
+      "type": "task",
+      "priority": "P0",
+      "title": "Store device identifiers for attribution",
+      "labels": [
+        "pii",
+        "gdpr"
+      ]
+    }
+  },
+  "notes": {
+    "1": {
+      "source": "sales",
+      "text": "Enterprise customer wants better targeting and attribution dashboards."
+    }
+  },
+  "docs": {
+    "1": {
+      "id": "DOC-21",
+      "title": "Privacy note",
+      "snippet": "EU GDPR implications likely. Consent + data minimization required."
+    }
+  },
+  "metrics_keys": [
+    "conversion_rate",
+    "churn_rate"
+  ]
+}
