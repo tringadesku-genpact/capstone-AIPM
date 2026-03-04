@@ -8,7 +8,7 @@ Output: findings_requirements.json
 """
 
 from ..state import PMState
-from src.pm.utils.output import write_json
+from src.pm.utils.output import write_json, write_csv
 from src.pm.utils.validate import validate_json
 
 
@@ -188,11 +188,58 @@ def run(state: PMState) -> PMState:
 
     write_json(state["out_dir"], "findings_requirements.json", output)
 
+    # ---- Step 5b: Write backlog.csv -------------------------------------
+    csv_rows = [
+        {
+            "backlog_id": item["backlog_id"],
+            "title": item["title"],
+            "priority": item["priority"],
+            "acceptance_criteria": " | ".join(item["acceptance_criteria"]),
+            "definition_of_done": item["definition_of_done"],
+        }
+        for item in backlog
+    ]
+    write_csv(state["out_dir"], "backlog.csv", csv_rows)
+
     # ---- Step 6: Store in shared state ----------------------------------
     state.setdefault("findings", {})
     state["findings"]["requirements"] = output
 
     return state
+
+
+# ---- PRD section template (called by Agent H) ---------------------------
+
+def build_prd_requirements_section(requirements: list) -> str:
+    """
+    Format Agent E's requirements + acceptance criteria into a PRD markdown section.
+    Agent H splices the returned string into prd.md.
+    """
+    if not requirements:
+        return "## Requirements\n\n_No requirements generated._\n"
+
+    lines = ["## Requirements\n"]
+    for req in requirements:
+        priority = req.get("priority", "P2")
+        lines.append(f"### {req['req_id']} — {req['title']} `[{priority}]`\n")
+
+        acs = req.get("acceptance_criteria", [])
+        if acs:
+            lines.append("**Acceptance Criteria**\n")
+            lines.extend(f"- {ac}" for ac in acs)
+            lines.append("")
+
+        edges = req.get("edge_cases", [])
+        if edges:
+            lines.append("**Edge Cases**\n")
+            lines.extend(f"- {e}" for e in edges)
+            lines.append("")
+
+        source = req.get("source_ticket")
+        if source:
+            lines.append(f"_Source: `{source}`_\n")
+
+    return "\n".join(lines)
 
 
 # ---- Helper: pick edge cases based on ticket labels ---------------------
