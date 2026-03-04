@@ -54,11 +54,15 @@ _DEFAULT_JOURNEY = [
 def run(state: PMState) -> PMState:
     state.setdefault("trace", []).append("E_requirements")
 
-    cp = state["context_packet"]
+    cp = state.get("context_packet")
+    if not cp:
+        raise ValueError("context_packet missing from state — Agent A must run first.")
+
     tickets = cp.get("normalized_tickets", [])
     hotspots = cp.get("hotspots", [])
     rtype = cp.get("request_type", "")
     product_name = cp.get("product", {}).get("name", "Product")
+    missing_info = cp.get("missing_info", [])
 
     # ---- Step 1: Build one requirement per ticket -----------------------
     requirements = []
@@ -73,6 +77,22 @@ def run(state: PMState) -> PMState:
             ],
             "edge_cases": _edge_cases_for(t),
             "source_ticket": t["id"],
+        }
+        requirements.append(req)
+
+    # ---- Step 1b: Gap-fix requirement from missing_info -----------------
+    i = len(requirements)
+    for gap in missing_info:
+        i += 1
+        req = {
+            "req_id": f"REQ-{i:03d}",
+            "title": f"Resolve missing information: {gap}",
+            "priority": "P1",
+            "acceptance_criteria": [
+                f"The gap '{gap}' is documented and resolved before sprint start.",
+            ],
+            "edge_cases": ["Gap cannot be resolved — escalate to PM lead."],
+            "source_ticket": None,
         }
         requirements.append(req)
 
@@ -119,7 +139,8 @@ def run(state: PMState) -> PMState:
 
     # ---- Step 4: Create findings (matches finding.schema.json) ----------
     journey_steps = _JOURNEYS.get(rtype, _DEFAULT_JOURNEY)
-    source_ticket_ids = [r["source_ticket"] for r in requirements if r["source_ticket"]]
+    source_ticket_refs = [f"ticket:{r['source_ticket']}" for r in requirements if r["source_ticket"]]
+    evidence_base = source_ticket_refs or [f"request_type={rtype}"]
 
     findings = [
         {
@@ -144,10 +165,11 @@ def run(state: PMState) -> PMState:
                 f"{len(backlog)} backlog item(s) for {product_name}."
             ),
             "recommendation": "Review acceptance criteria with engineering before sprint planning.",
-            "evidence": source_ticket_ids,
+            "evidence": evidence_base,
             "assumptions": [
                 "Requirements are derived from tickets and hotspots, not direct user research.",
                 "Story sizing is not included; estimation session still needed.",
+                f"{len(missing_info)} missing-info flag(s) converted to gap-fix requirements." if missing_info else "No missing-info flags in this bundle.",
             ],
         },
     ]
