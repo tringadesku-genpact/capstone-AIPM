@@ -195,6 +195,40 @@ def run(state: PMState) -> PMState:
     return state
 
 
+# ---- PRD section template (called by Agent H) ---------------------------
+
+def build_prd_requirements_section(requirements: list) -> str:
+    """
+    Format Agent E's requirements + acceptance criteria into a PRD markdown section.
+    Agent H splices the returned string into prd.md.
+    """
+    if not requirements:
+        return "## Requirements\n\n_No requirements generated._\n"
+
+    lines = ["## Requirements\n"]
+    for req in requirements:
+        priority = req.get("priority", "P2")
+        lines.append(f"### {req['req_id']} — {req['title']} `[{priority}]`\n")
+
+        acs = req.get("acceptance_criteria", [])
+        if acs:
+            lines.append("**Acceptance Criteria**\n")
+            lines.extend(f"- {ac}" for ac in acs)
+            lines.append("")
+
+        edges = req.get("edge_cases", [])
+        if edges:
+            lines.append("**Edge Cases**\n")
+            lines.extend(f"- {e}" for e in edges)
+            lines.append("")
+
+        source = req.get("source_ticket")
+        if source:
+            lines.append(f"_Source: `{source}`_\n")
+
+    return "\n".join(lines)
+
+
 # ---- Helper: pick edge cases based on ticket labels ---------------------
 
 def _edge_cases_for(ticket):

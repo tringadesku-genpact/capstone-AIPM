@@ -188,3 +188,60 @@ def run(state):
     write_json(state["out_dir"], "findings_metrics.json", payload)
     state.setdefault("findings", {})["metrics"] = payload
     return state
+
+
+# ---- Experiment plan template (called by Agent H) ----------------------
+
+def build_experiment_plan_md(framework: dict, events: list, product_name: str, rtype: str) -> str:
+    """
+    Generate an experiment_plan.md string from the Agent D metrics framework.
+    Agent H calls this and writes it to out_dir via write_text().
+    """
+    metrics_list = "\n".join(f"- {m}" for m in framework["input_metrics"])
+    guardrails_list = "\n".join(f"- {g}" for g in framework["guardrails"])
+    events_list = "\n".join(
+        f"- `{e['event_name']}` — {e['trigger']} _(properties: {e['properties_hint']})_"
+        for e in events
+    )
+
+    return f"""\
+# Experiment Plan — {product_name} ({rtype})
+
+## Hypothesis
+If we address the issues driving this `{rtype}` request, then **{framework['north_star']}**,
+measured over a 2-week experiment window with statistical significance (p < 0.05).
+
+## Success Metrics
+
+### Primary (North Star)
+- {framework['north_star']}
+
+### Input Metrics
+{metrics_list}
+
+## Guardrails
+{guardrails_list}
+
+## A/B Design
+
+| Parameter | Value |
+|-----------|-------|
+| Variant A (Control) | Current production behaviour |
+| Variant B (Treatment) | Change under test |
+| Traffic split | 50 / 50 |
+| Minimum duration | 2 weeks |
+| Sample size | TBD — requires baseline conversion rate and MDE |
+| Audience | All eligible active users unless scoped otherwise |
+
+## Instrumentation
+
+The following events must be firing and validated before experiment launch:
+
+{events_list}
+
+## Sign-off Criteria
+- [ ] All guardrails hold throughout the experiment window
+- [ ] Primary metric moves in the expected direction at p < 0.05
+- [ ] No P0 incidents attributable to the treatment variant
+- [ ] Instrumentation QA sign-off from data engineering
+"""
