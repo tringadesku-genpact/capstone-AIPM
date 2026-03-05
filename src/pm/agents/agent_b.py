@@ -148,7 +148,9 @@ def run(state: PMState) -> PMState:
 
     state.setdefault("trace", []).append("B_customer")
 
-    ctx = state.get("context_packet") or {}
+    ctx = state.get("context_packet")
+    if not ctx:
+        raise ValueError("context_packet missing from state — Agent A must run first.")
     notes = ctx.get("normalized_notes", []) or []
     tickets = ctx.get("normalized_tickets", []) or []
     missing_info = ctx.get("missing_info", []) or []
