@@ -8,7 +8,7 @@ Output: findings_requirements.json
 """
 
 from ..state import PMState
-from src.pm.utils.output import write_json, write_csv
+from src.pm.utils.output import write_json
 from src.pm.utils.validate import validate_json
 
 
@@ -187,19 +187,6 @@ def run(state: PMState) -> PMState:
     }
 
     write_json(state["out_dir"], "findings_requirements.json", output)
-
-    # ---- Step 5b: Write backlog.csv -------------------------------------
-    csv_rows = [
-        {
-            "backlog_id": item["backlog_id"],
-            "title": item["title"],
-            "priority": item["priority"],
-            "acceptance_criteria": " | ".join(item["acceptance_criteria"]),
-            "definition_of_done": item["definition_of_done"],
-        }
-        for item in backlog
-    ]
-    write_csv(state["out_dir"], "backlog.csv", csv_rows)
 
     # ---- Step 6: Store in shared state ----------------------------------
     state.setdefault("findings", {})
