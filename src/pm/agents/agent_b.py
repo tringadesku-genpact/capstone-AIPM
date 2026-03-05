@@ -180,7 +180,10 @@ def run(state: PMState) -> PMState:
         if any(k in joined for k in ["pricing", "billing", "subscription"]):
             themes.append("Users are confused by pricing/subscription information.")
         if not themes:
-            themes.append("Customer notes indicate friction in the described area.")
+            if problem:
+                themes.append(f"Bundle suggests the need to address: {problem.lower()}")
+            else:
+                themes.append("Customer notes indicate friction in the described area.")
         insights.extend(themes[:2])
     elif tickets:
         insights.append("Tickets suggest work is needed in the described area, but customer notes are missing.")
