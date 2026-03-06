@@ -82,6 +82,8 @@ def run(state: PMState) -> PMState:
     bundle = state.get("bundle", {}) or {}
     policy = state.get("policy", {}) or {}
     ctx = state.get("context_packet", {}) or {}
+    privacy_cfg = policy.get("privacy", {}) or {}
+    pii_requires_validate_first = bool(privacy_cfg.get("pii_requires_validate_first", False))
 
     bundle_id = ctx.get("bundle_id") or bundle.get("bundle_id", "")
     request_type = ctx.get("request_type") or bundle.get("request_type", "")
@@ -127,6 +129,17 @@ def run(state: PMState) -> PMState:
             "Key information is missing, increasing decision risk and lowering confidence.",
             "Block full rollout until missing items are provided and validated; re-run pipeline afterwards.",
             [f"missing_info={missing_info}"],
+        ))
+
+    if pii_requires_validate_first and handles_pii:
+        findings.append(_finding(
+            "privacy_validation_gate",
+            "high",
+            0.8,
+            "Policy requires validation first when PII is involved.",
+            "Validate first: confirm data items, consent flow, and privacy review before rollout.",
+            [f"handles_pii={handles_pii}", f"request_type={request_type}"],
+            ["Triggered by policy: privacy.pii_requires_validate_first=true."]
         ))
 
     # Validate findings

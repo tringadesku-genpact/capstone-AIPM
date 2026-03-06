@@ -87,8 +87,8 @@ def _write_backlog_csv(out_dir: str, backlog: List[Dict[str, Any]]) -> None:
             writer.writerow([
                 item.get("backlog_id", ""),
                 item.get("title", ""),
-                " / ".join(item.get("acceptance_criteria", [])),
                 item.get("priority", ""),
+                " / ".join(item.get("acceptance_criteria", [])),
                 item.get("definition_of_done", ""),
             ])
 
@@ -261,7 +261,10 @@ def run(state: PMState) -> PMState:
         "contradictions": contradictions,
     }
 
-    write_json(state["out_dir"], "final_plan.json", final_plan)
+    artifacts_dir = Path(state["out_dir"]) / "artifacts"
+    artifacts_dir.mkdir(parents=True, exist_ok=True)
+
+    write_json(artifacts_dir, "final_plan.json", final_plan)
 
     # decision_log.md
     decision_log_lines: List[str] = []
@@ -285,11 +288,11 @@ def run(state: PMState) -> PMState:
     decision_log_lines.extend([f"- {s}" for s in next_steps])
     decision_log_lines.append("")
 
-    _write_md(state["out_dir"], "decision_log.md", "\n".join(decision_log_lines))
+    _write_md(artifacts_dir, "decision_log.md", "\n".join(decision_log_lines))
 
     # prd.md
     prd_md = _build_prd(ctx, risk, final_plan, req_output, feasibility_output)
-    _write_md(state["out_dir"], "prd.md", prd_md)
+    _write_md(artifacts_dir, "prd.md", prd_md)
 
     # roadmap.json
     phased = feasibility_output.get("phased_delivery", {}) or {}
@@ -321,7 +324,7 @@ def run(state: PMState) -> PMState:
             },
         ],
     }
-    write_json(state["out_dir"], "roadmap.json", roadmap)
+    write_json(artifacts_dir, "roadmap.json", roadmap)
 
     # experiment_plan.md
     framework = metrics_output.get("metric_framework", {})
@@ -345,11 +348,11 @@ No experiment plan could be generated because Agent D metrics output is incomple
 - event_taxonomy
 """
 
-    _write_md(state["out_dir"], "experiment_plan.md", experiment_md)
+    _write_md(artifacts_dir, "experiment_plan.md", experiment_md)
 
     # backlog.csv
     backlog = req_output.get("backlog", []) or []
-    _write_backlog_csv(state["out_dir"], backlog)
+    _write_backlog_csv(artifacts_dir, backlog)
 
     state["final_plan"] = {
         "final_plan": final_plan,
