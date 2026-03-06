@@ -27,7 +27,7 @@
       },
       "request_type": {
         "type": "string",
-        "enum": ["metric_drop", "high_risk_idea", "competitive_parity", "other"]
+        "enum": ["metric_drop", "high_risk_idea", "competitive_parity", "accessibility_gap", "other"]
       },
       "problem_statement": { "type": "string" },
       "tickets_raw": { "type": "array", "items": { "type": "object" } },
