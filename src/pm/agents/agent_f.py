@@ -210,7 +210,7 @@ def run(state: PMState) -> PMState:
             "phased_delivery",
             "high",
             0.72,
-            f"Phased delivery proposed: MVP({len(mvp)}) , V1({len(v1)}) , ({len(v2)}).",
+            f"Phased delivery proposed: MVP({len(mvp)}), V1({len(v1)}), V2({len(v2)}).",
             "Ship MVP fast with guardrails; expand scope after stability and metric integrity are confirmed.",
             evidence,
             assumptions=["Phase items are a playbook; tailor to your architecture and timeline."],

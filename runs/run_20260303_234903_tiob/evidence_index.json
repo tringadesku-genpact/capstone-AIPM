@@ -1,0 +1,41 @@
+{
+  "tickets": {
+    "FP-601": {
+      "id": "FP-601",
+      "type": "bug",
+      "priority": "P1",
+      "title": "Screen reader labels missing on login form",
+      "labels": [
+        "accessibility",
+        "auth"
+      ]
+    },
+    "FP-602": {
+      "id": "FP-602",
+      "type": "bug",
+      "priority": "P2",
+      "title": "Keyboard focus order broken on checkout",
+      "labels": [
+        "accessibility",
+        "checkout"
+      ]
+    }
+  },
+  "notes": {
+    "1": {
+      "source": "support",
+      "text": "Users with screen readers cannot complete login."
+    }
+  },
+  "docs": {
+    "1": {
+      "id": "DOC-51",
+      "title": "A11y note",
+      "snippet": "WCAG basics: labels, focus order, contrast. Re-test after redesign."
+    }
+  },
+  "metrics_keys": [
+    "login_error_rate_current",
+    "login_error_rate_previous"
+  ]
+}

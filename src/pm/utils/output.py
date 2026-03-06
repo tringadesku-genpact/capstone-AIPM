@@ -9,7 +9,7 @@ def write_json(out_dir: str, filename: str, data):
     path.parent.mkdir(parents=True, exist_ok=True)
 
     with open(path, "w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2)
+        json.dump(data, f, indent=2, ensure_ascii=False)
 
 
 def write_text(out_dir: str, filename: str, text: str):
