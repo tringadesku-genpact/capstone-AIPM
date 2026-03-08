@@ -18,9 +18,20 @@ from src.pm.utils.validate import validate_json
 _COUNTER = 0
 
 
-def _finding(ftype: str, impact: str, confidence: float, summary: str, recommendation: str, evidence: List[str]):
+def _finding(
+    ftype: str,
+    impact: str,
+    confidence: float,
+    summary: str,
+    recommendation: str,
+    evidence: List[str] | None = None,
+):
     global _COUNTER
     _COUNTER += 1
+
+    if evidence is None:
+        evidence = []
+
     return {
         "id": f"C-{_COUNTER:03d}",
         "agent": "C_competition",

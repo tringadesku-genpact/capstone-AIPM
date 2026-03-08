@@ -16,11 +16,16 @@ def _finding(
     confidence: float,
     summary: str,
     recommendation: str,
-    evidence: List[str],
+    evidence: List[str] | None = None,
     assumptions: List[str] | None = None,
 ) -> Dict[str, Any]:
+
     global _COUNTER
     _COUNTER += 1
+
+    if evidence is None:
+        evidence = []
+
     return {
         "id": f"B-{_COUNTER:03d}",
         "agent": "B_customer",
@@ -32,7 +37,6 @@ def _finding(
         "evidence": evidence,
         "assumptions": assumptions or [],
     }
-
 
 def _note_refs(notes: List[Dict[str, Any]]) -> List[str]:
     return [f"note:{i}" for i in range(1, len(notes) + 1)]
