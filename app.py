@@ -8,7 +8,7 @@ from src.pm.pipeline import run_pipeline
 
 st.set_page_config(
     page_title="PM Pipeline Runner",
-    page_icon="📌",
+    page_icon="",
     layout="wide",
 )
 
