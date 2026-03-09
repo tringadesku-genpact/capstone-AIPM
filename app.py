@@ -5,6 +5,11 @@ import streamlit as st
 
 from src.pm.pipeline import run_pipeline
 
+import os
+from src.pm.utils.github_issue import create_issue
+from dotenv import load_dotenv
+load_dotenv()
+
 
 st.set_page_config(
     page_title="PM Pipeline Runner",
@@ -34,6 +39,8 @@ if run_clicked:
         bundle_file = uploads_dir / uploaded_bundle.name
         bundle_file.write_bytes(uploaded_bundle.read())
 
+        repo_name = "tringadesku-genpact/capstone-AIPM"
+
         try:
             with st.spinner("Running PM pipeline..."):
                 final_state = run_pipeline(
@@ -42,6 +49,61 @@ if run_clicked:
                 )
 
             st.success("Pipeline finished successfully.")
+
+            #github issue creator
+            if repo_name:
+                github_token = os.getenv("GITHUB_TOKEN")
+
+                if github_token:
+                    final_plan_wrapper = final_state.get("final_plan", {}) or {}
+                    final_plan = final_plan_wrapper.get("final_plan", {}) or {}
+
+                    decision = final_plan.get("decision", "UNKNOWN")
+                    next_steps = final_plan.get("next_steps", []) or []
+
+                    bundle_id = (
+                        final_state.get("context_packet", {}).get("bundle_id")
+                        or final_state.get("bundle", {}).get("bundle_id")
+                        or "unknown_bundle"
+                    )
+
+                    artifacts_dir = Path(final_state.get("out_dir", "")) / "artifacts"
+
+                    body_lines = [
+                        "## PM Pipeline Analysis",
+                        "",
+                        f"**Bundle:** {bundle_id}",
+                        "",
+                        f"**Decision:** {decision}",
+                        "",
+                        "### Next Steps",
+                    ]
+
+                    if next_steps:
+                        body_lines.extend([f"- {step}" for step in next_steps])
+                    else:
+                        body_lines.append("- None")
+
+                    body_lines.extend([
+                        "",
+                        "### Artifacts Generated",
+                        f"- PRD: `{artifacts_dir / 'prd.md'}`",
+                        f"- Roadmap: `{artifacts_dir / 'roadmap.json'}`",
+                        f"- Decision Log: `{artifacts_dir / 'decision_log.md'}`",
+                        f"- Experiment Plan: `{artifacts_dir / 'experiment_plan.md'}`",
+                        f"- Backlog: `{artifacts_dir / 'backlog.csv'}`",
+                    ])
+
+                    body = "\n".join(body_lines)
+
+                    issue_url = create_issue(
+                        github_token=github_token,
+                        repo_name=repo_name,
+                        title=f"PM Pipeline Analysis – {bundle_id}",
+                        body=body,
+                    )
+
+                    st.success(f"GitHub Issue created: {issue_url}")
 
             out_dir = Path(final_state["out_dir"]) / "artifacts"
 
