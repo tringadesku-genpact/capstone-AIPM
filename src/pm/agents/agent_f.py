@@ -16,7 +16,7 @@ def _finding(
     confidence: float,
     summary: str,
     recommendation: str,
-    evidence: List[str],
+    evidence: List[str] | None = None,
     assumptions: List[str] | None = None,
 ) -> Dict[str, Any]:
     global _COUNTER

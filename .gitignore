@@ -9,6 +9,8 @@ runs/
 # C extensions
 *.so
 
+uploads/
+
 # Distribution / packaging
 .Python
 build/

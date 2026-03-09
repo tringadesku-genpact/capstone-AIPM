@@ -17,10 +17,22 @@ from src.pm.utils.validate import validate_json
 _COUNTER = 0
 
 
-def _finding(ftype: str, impact: str, confidence: float, summary: str,
-             recommendation: str, evidence: List[str], assumptions: List[str] | None = None) -> Dict[str, Any]:
+def _finding(
+    ftype: str,
+    impact: str,
+    confidence: float,
+    summary: str,
+    recommendation: str,
+    evidence: List[str] | None = None,
+    assumptions: List[str] | None = None
+) -> Dict[str, Any]:
+
     global _COUNTER
     _COUNTER += 1
+
+    if evidence is None:
+        evidence = []
+
     return {
         "id": f"G-{_COUNTER:03d}",
         "agent": "G_risk",
