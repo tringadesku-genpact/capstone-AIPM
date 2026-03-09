@@ -9,6 +9,9 @@ from src.pm.state import create_initial_state
 from src.pm.utils.io import load_json, load_yaml
 from src.pm.utils.validate import validate_json
 
+import os
+from src.pm.utils.github_issue import create_issue
+
 
 def make_run_id():
     ts = datetime.now(timezone.utc).strftime("%Y%m%d_%H%M%S")
@@ -20,6 +23,7 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--bundle", required=True)
     parser.add_argument("--policy", required=True)
+    parser.add_argument("--repo", required=False, help="GitHub repo in owner/name format")
     args = parser.parse_args()
 
     # Create run folder
@@ -48,6 +52,63 @@ def main():
     # Build and run graph
     graph = build_graph().compile()
     final_state = graph.invoke(state)
+
+
+    if args.repo:
+        github_token = os.getenv("GITHUB_TOKEN")
+
+        if not github_token:
+            print("Skipping GitHub issue creation: GITHUB_TOKEN not set.")
+        else:
+            final_plan_wrapper = final_state.get("final_plan", {}) or {}
+            final_plan = final_plan_wrapper.get("final_plan", {}) or {}
+
+            decision = final_plan.get("decision", "UNKNOWN")
+            next_steps = final_plan.get("next_steps", []) or []
+
+            bundle_id = (
+                final_state.get("context_packet", {}).get("bundle_id")
+                or final_state.get("bundle", {}).get("bundle_id")
+                or "unknown_bundle"
+            )
+
+            artifacts_dir = Path(final_state.get("out_dir", "")) / "artifacts"
+
+            body_lines = [
+                "## PM Pipeline Analysis",
+                "",
+                f"**Bundle:** {bundle_id}",
+                "",
+                f"**Decision:** {decision}",
+                "",
+                "### Next Steps",
+            ]
+
+            if next_steps:
+                body_lines.extend([f"- {step}" for step in next_steps])
+            else:
+                body_lines.append("- None")
+
+            body_lines.extend([
+                "",
+                "### Artifacts Generated",
+                f"- PRD: `{artifacts_dir / 'prd.md'}`",
+                f"- Roadmap: `{artifacts_dir / 'roadmap.json'}`",
+                f"- Decision Log: `{artifacts_dir / 'decision_log.md'}`",
+                f"- Experiment Plan: `{artifacts_dir / 'experiment_plan.md'}`",
+                f"- Backlog: `{artifacts_dir / 'backlog.csv'}`",
+            ])
+
+            body = "\n".join(body_lines)
+
+            issue_url = create_issue(
+                github_token=github_token,
+                repo_name=args.repo,
+                title=f"PM Pipeline Analysis – {bundle_id}",
+                body=body,
+            )
+
+            print(f"GitHub Issue created: {issue_url}")
 
     print(f"Run complete: {out_dir}")
 
