@@ -38,10 +38,10 @@ pip install -r requirements.txt
 
 ## 3) (Optional) Environment variables
 
-If you use OpenAI later, set your key in a `.env` file (never commit this):
+If you use GitHub later, set your token in a `.env` file (never commit this):
 
 ```env
-OPENAI_API_KEY=your_key_here
+GITHUB_TOKEN=your_key_here
 ```
 
 We also keep a `.env.example` as a template.
@@ -62,7 +62,43 @@ Expected output:
 
 ---
 
-## 5) Where outputs go
+## 5) Run the Streamlit UI (Optional)
+
+Instead of running the pipeline through the CLI, you can use a simple **Streamlit interface** to upload bundles and view generated artifacts.
+
+Start the UI from the project root:
+
+```bash
+streamlit run app.py
+```
+
+Once started, your browser will open automatically (usually at `http://localhost:8501`).
+
+From the UI you can:
+
+- Upload a **bundle JSON**
+- Run the **PM pipeline**
+- View generated outputs:
+  - Final Plan
+  - PRD
+  - Roadmap
+  - Decision Log
+  - Experiment Plan
+  - Backlog CSV
+
+This provides a quick way to **demonstrate the full pipeline without using CLI commands**.
+
+---
+
+## 6) GitHub Issue Integration (Optional)
+
+The pipeline can automatically create a **GitHub Issue summarizing the analysis** after a run.
+
+This requires a **GitHub Personal Access Token**.
+
+---
+
+## 7) Where outputs go
 
 Each run is isolated in its own directory:
 

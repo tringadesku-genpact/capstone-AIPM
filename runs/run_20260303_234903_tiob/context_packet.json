@@ -1,0 +1,95 @@
+{
+  "bundle_id": "bundle_accessibility_gap",
+  "product": {
+    "name": "FlowPay",
+    "region": "EU",
+    "handles_pii": true
+  },
+  "request_type": "other",
+  "problem_statement": "After UI redesign, keyboard navigation and screen reader flow seem broken on login/checkout.",
+  "normalized_tickets": [
+    {
+      "id": "FP-601",
+      "type": "bug",
+      "priority": "P1",
+      "title": "Screen reader labels missing on login form",
+      "labels": [
+        "accessibility",
+        "auth"
+      ]
+    },
+    {
+      "id": "FP-602",
+      "type": "bug",
+      "priority": "P2",
+      "title": "Keyboard focus order broken on checkout",
+      "labels": [
+        "accessibility",
+        "checkout"
+      ]
+    }
+  ],
+  "normalized_notes": [
+    {
+      "source": "support",
+      "text": "Users with screen readers cannot complete login."
+    }
+  ],
+  "normalized_docs": [
+    {
+      "id": "DOC-51",
+      "title": "A11y note",
+      "snippet": "WCAG basics: labels, focus order, contrast. Re-test after redesign."
+    }
+  ],
+  "metrics_snapshot": {
+    "login_error_rate_current": 0.029,
+    "login_error_rate_previous": 0.012
+  },
+  "hotspots": [
+    "auth"
+  ],
+  "missing_info": [],
+  "ignore_rules_applied": [],
+  "evidence_index": {
+    "tickets": {
+      "FP-601": {
+        "id": "FP-601",
+        "type": "bug",
+        "priority": "P1",
+        "title": "Screen reader labels missing on login form",
+        "labels": [
+          "accessibility",
+          "auth"
+        ]
+      },
+      "FP-602": {
+        "id": "FP-602",
+        "type": "bug",
+        "priority": "P2",
+        "title": "Keyboard focus order broken on checkout",
+        "labels": [
+          "accessibility",
+          "checkout"
+        ]
+      }
+    },
+    "notes": {
+      "1": {
+        "source": "support",
+        "text": "Users with screen readers cannot complete login."
+      }
+    },
+    "docs": {
+      "1": {
+        "id": "DOC-51",
+        "title": "A11y note",
+        "snippet": "WCAG basics: labels, focus order, contrast. Re-test after redesign."
+      }
+    },
+    "metrics_keys": [
+      "login_error_rate_current",
+      "login_error_rate_previous"
+    ]
+  }
+}

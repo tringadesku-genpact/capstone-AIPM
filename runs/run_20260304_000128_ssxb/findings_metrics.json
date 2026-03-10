@@ -1,0 +1,81 @@
+{
+  "agent": "D_metrics",
+  "findings": [
+    {
+      "id": "D-001",
+      "agent": "D_metrics",
+      "type": "north_star_proposal",
+      "impact": "high",
+      "confidence": 0.75,
+      "summary": "North Star: Validate lift in Weekly Active Paying Users with statistical significance. Inputs: conversion_rate, fraud_rate, transaction_success_rate, retention_rate.",
+      "recommendation": "Guardrails: PII/KYC compliance gate must pass before launch; Fraud rate stays within SLO.",
+      "evidence": [
+        "request_type=high_risk_idea"
+      ],
+      "assumptions": []
+    },
+    {
+      "id": "D-002",
+      "agent": "D_metrics",
+      "type": "event_taxonomy",
+      "impact": "medium",
+      "confidence": 0.65,
+      "summary": "Proposed 3 events: payment_initiated, transaction_completed, experiment_exposure.",
+      "recommendation": "Review with eng before sprint.",
+      "evidence": [
+        "request_type=high_risk_idea"
+      ],
+      "assumptions": []
+    },
+    {
+      "id": "D-003",
+      "agent": "D_metrics",
+      "type": "metric_integrity",
+      "impact": "medium",
+      "confidence": 0.85,
+      "summary": "Integrity: missing_device_segmentation",
+      "recommendation": "No device-level breakdown. Payment issues are often device-specific.",
+      "evidence": [
+        "snapshot_keys=['conversion_rate', 'churn_rate']"
+      ],
+      "assumptions": []
+    }
+  ],
+  "metric_framework": {
+    "north_star": "Validate lift in Weekly Active Paying Users with statistical significance",
+    "input_metrics": [
+      "conversion_rate",
+      "fraud_rate",
+      "transaction_success_rate",
+      "retention_rate"
+    ],
+    "guardrails": [
+      "PII/KYC compliance gate must pass before launch",
+      "Fraud rate stays within SLO"
+    ]
+  },
+  "event_taxonomy": [
+    {
+      "event_name": "payment_initiated",
+      "trigger": "User starts a payment (P2P, merchant, or online)",
+      "properties_hint": "payment_type, amount, currency, method"
+    },
+    {
+      "event_name": "transaction_completed",
+      "trigger": "Payment is successfully processed",
+      "properties_hint": "transaction_id, amount, duration_ms, method"
+    },
+    {
+      "event_name": "experiment_exposure",
+      "trigger": "User bucketed into experiment variant",
+      "properties_hint": "experiment_id, variant, user_segment"
+    }
+  ],
+  "integrity_issues": [
+    {
+      "issue": "missing_device_segmentation",
+      "severity": "medium",
+      "detail": "No device-level breakdown. Payment issues are often device-specific."
+    }
+  ]
+}

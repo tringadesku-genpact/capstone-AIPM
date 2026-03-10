@@ -1,0 +1,13 @@
+{
+  "bundle_id": "bundle_high_risk_privacy",
+  "decision": "NEEDS_INFO",
+  "rationale": "Problem: Idea: add cross-app tracking to improve personalization and re-targeting. Need to move fast.\nRequest type: high_risk_idea\nRisk: high (score=70)\nHotspots: ['privacy']\nMissing info: ['Missing data_items for high-risk idea.']",
+  "key_findings_count": 6,
+  "next_steps": [
+    "Collect missing information and attach supporting evidence.",
+    "Re-run the pipeline after missing items are provided."
+  ],
+  "open_questions": [
+    "Missing data_items for high-risk idea."
+  ]
+}

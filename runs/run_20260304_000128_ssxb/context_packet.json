@@ -1,0 +1,99 @@
+{
+  "bundle_id": "bundle_high_risk_privacy",
+  "product": {
+    "name": "FlowPay",
+    "region": "EU",
+    "handles_pii": true
+  },
+  "request_type": "high_risk_idea",
+  "problem_statement": "Idea: add cross-app tracking to improve personalization and re-targeting. Need to move fast.",
+  "normalized_tickets": [
+    {
+      "id": "FP-301",
+      "type": "story",
+      "priority": "P1",
+      "title": "Implement user-level tracking across checkout + marketing",
+      "labels": [
+        "tracking",
+        "privacy"
+      ]
+    },
+    {
+      "id": "FP-302",
+      "type": "task",
+      "priority": "P0",
+      "title": "Store device identifiers for attribution",
+      "labels": [
+        "pii",
+        "gdpr"
+      ]
+    }
+  ],
+  "normalized_notes": [
+    {
+      "source": "sales",
+      "text": "Enterprise customer wants better targeting and attribution dashboards."
+    }
+  ],
+  "normalized_docs": [
+    {
+      "id": "DOC-21",
+      "title": "Privacy note",
+      "snippet": "EU GDPR implications likely. Consent + data minimization required."
+    }
+  ],
+  "metrics_snapshot": {
+    "conversion_rate": 0.028,
+    "churn_rate": 0.041
+  },
+  "hotspots": [
+    "privacy"
+  ],
+  "missing_info": [
+    "Missing data_items for high-risk idea."
+  ],
+  "ignore_rules_applied": [
+    "ignored_ticket:FP-303:priority"
+  ],
+  "evidence_index": {
+    "tickets": {
+      "FP-301": {
+        "id": "FP-301",
+        "type": "story",
+        "priority": "P1",
+        "title": "Implement user-level tracking across checkout + marketing",
+        "labels": [
+          "tracking",
+          "privacy"
+        ]
+      },
+      "FP-302": {
+        "id": "FP-302",
+        "type": "task",
+        "priority": "P0",
+        "title": "Store device identifiers for attribution",
+        "labels": [
+          "pii",
+          "gdpr"
+        ]
+      }
+    },
+    "notes": {
+      "1": {
+        "source": "sales",
+        "text": "Enterprise customer wants better targeting and attribution dashboards."
+      }
+    },
+    "docs": {
+      "1": {
+        "id": "DOC-21",
+        "title": "Privacy note",
+        "snippet": "EU GDPR implications likely. Consent + data minimization required."
+      }
+    },
+    "metrics_keys": [
+      "conversion_rate",
+      "churn_rate"
+    ]
+  }
+}

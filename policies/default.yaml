@@ -11,3 +11,6 @@ hotspot_keywords:
   privacy: ["pii", "gdpr", "tracking"]
   auth: ["login", "password"]
   pricing: ["billing", "subscription"]
+
+risk:
+  strict_mode: false
