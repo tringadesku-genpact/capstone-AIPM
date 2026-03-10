@@ -124,7 +124,9 @@ if run_clicked:
                 roadmap_data = json.loads(roadmap_file.read_text(encoding="utf-8"))
 
             decision = final_plan_data.get("decision", "N/A")
+            decision_summary = final_plan_data.get("decision_summary", "")
             findings_count = final_plan_data.get("key_findings_count", "N/A")
+            top_findings = final_plan_data.get("top_findings", []) or []
             run_id = final_state.get("run_id", "N/A")
             out_dir_value = final_state.get("out_dir", "N/A")
 
@@ -136,12 +138,36 @@ if run_clicked:
                 risk_score = risk_summary.get("score", "N/A")
 
             st.subheader("Overview")
-            col1, col2, col3, col4 = st.columns(4)
 
-            col1.metric("Decision", decision)
-            col2.metric("Risk Level", risk_level)
-            col3.metric("Risk Score", risk_score)
-            col4.metric("Findings", findings_count)
+            st.markdown("### Decision")
+            decision_display = decision.replace("_", " ")
+
+            if decision == "PROCEED":
+                st.success(decision_display)
+            elif decision == "PROCEED_WITH_MITIGATIONS":
+                st.warning(decision_display)
+            elif decision == "VALIDATE_FIRST":
+                st.info(decision_display)
+            else:
+                st.error(decision_display)
+
+            col1, col2, col3 = st.columns(3)
+            col1.metric("Risk Level", risk_level)
+            col2.metric("Risk Score", risk_score)
+            col3.metric("Findings", findings_count)
+
+            st.markdown("### Decision Summary")
+            if decision_summary:
+                if decision == "PROCEED":
+                    st.success(decision_summary)
+                elif decision == "PROCEED_WITH_MITIGATIONS":
+                    st.warning(decision_summary)
+                elif decision == "VALIDATE_FIRST":
+                    st.info(decision_summary)
+                else:
+                    st.error(decision_summary)
+            else:
+                    st.info("No decision summary available.")
 
             st.markdown("### Run Details")
             details_col1, details_col2 = st.columns(2)
@@ -183,6 +209,20 @@ if run_clicked:
                     st.code(" -> ".join(trace))
                 else:
                     st.info("No execution trace found.")
+                
+                st.markdown("### Top Findings")
+                if top_findings:
+                    for item in top_findings:
+                        st.markdown(
+                            f"**[{item.get('id', 'N/A')}] {item.get('agent', 'N/A')} / {item.get('type', 'N/A')}**  \n"
+                            f"- Impact: `{item.get('impact', 'N/A')}`  \n"
+                            f"- Confidence: `{item.get('confidence', 'N/A')}`  \n"
+                            f"- Summary: {item.get('summary', '')}"
+                         )
+                        st.markdown("---")
+                else:
+                    st.info("No top findings available.")
+            
 
             st.markdown("### Generated Artifacts")
             artifact_col1, artifact_col2, artifact_col3 = st.columns(3)
