@@ -1,9 +1,10 @@
 """
 Agent H - Lead PM (Orchestrator + Judge)
 
-Reads:   state["context_packet"],state["findings"], state["risk_summary"]
-Writes: final_plan.json, prd.md, roadmap.json, decision_log.md
-Stores: state["final_plan"]
+Reads:   state["context_packet"], state["findings"], state["risk_summary"]
+Writes:  final_plan.json, prd.md, roadmap.json, decision_log.md,
+         experiment_plan.md, backlog.csv
+Stores:  state["final_plan"]
 """
 
 from __future__ import annotations
@@ -65,12 +66,78 @@ def _detect_contradictions(findings: List[Dict[str, Any]]) -> List[str]:
     return contradictions
 
 
-def _write_md(out_dir: str, filename: str, content: str) -> None:
+def _impact_rank(value: str) -> int:
+    ranks = {
+        "high": 3,
+        "medium": 2,
+        "low": 1,
+    }
+    return ranks.get(str(value).lower().strip(), 0)
+
+
+def _select_top_findings(findings: List[Dict[str, Any]], limit: int = 5) -> List[Dict[str, Any]]:
+    ranked = sorted(
+        findings,
+        key=lambda f: (
+            _impact_rank(f.get("impact", "")),
+            float(f.get("confidence", 0)),
+        ),
+        reverse=True,
+    )
+
+    top_items = []
+    for f in ranked[:limit]:
+        top_items.append({
+            "id": f.get("id", ""),
+            "agent": f.get("agent", ""),
+            "type": f.get("type", ""),
+            "impact": f.get("impact", ""),
+            "confidence": f.get("confidence", 0),
+            "summary": f.get("summary", ""),
+        })
+
+    return top_items
+
+
+def _build_decision_summary(
+    decision: str,
+    request_type: str,
+    risk_level: str,
+    risk_score: int,
+    missing_info: List[str],
+) -> str:
+    if decision == "VALIDATE_FIRST":
+        return (
+            f"Decision is VALIDATE_FIRST because the {request_type} request still has "
+            f"{len(missing_info)} open information gap(s), even though current risk is "
+            f"{risk_level} (score={risk_score})."
+        )
+
+    if decision == "PROCEED_WITH_MITIGATIONS":
+        return (
+            f"Decision is PROCEED_WITH_MITIGATIONS because the request can move forward, "
+            f"but the current risk level is {risk_level} (score={risk_score}) and requires "
+            f"guardrails, staged rollout, and ownership of mitigation steps."
+        )
+
+    if decision == "DO_NOT_PURSUE":
+        return (
+            f"Decision is DO_NOT_PURSUE because current risk is too high "
+            f"({risk_level}, score={risk_score}) for safe execution without major changes."
+        )
+
+    return (
+        f"Decision is PROCEED because risk is currently manageable "
+        f"({risk_level}, score={risk_score}) and no blocking information gaps remain."
+    )
+
+
+def _write_md(out_dir: str | Path, filename: str, content: str) -> None:
     path = Path(out_dir) / filename
     path.write_text(content, encoding="utf-8")
 
 
-def _write_backlog_csv(out_dir: str, backlog: List[Dict[str, Any]]) -> None:
+def _write_backlog_csv(out_dir: str | Path, backlog: List[Dict[str, Any]]) -> None:
     path = Path(out_dir) / "backlog.csv"
 
     with path.open("w", encoding="utf-8", newline="") as f:
@@ -210,6 +277,14 @@ def run(state: PMState) -> PMState:
 
     contradictions = _detect_contradictions(findings)
     open_questions = list(missing_info)
+    top_findings = _select_top_findings(findings, limit=5)
+    decision_summary = _build_decision_summary(
+        decision=decision,
+        request_type=request_type,
+        risk_level=risk_level,
+        risk_score=risk_score,
+        missing_info=missing_info,
+    )
 
     rationale_lines = [
         f"Problem: {problem}" if problem else "Problem: (not provided)",
@@ -254,8 +329,10 @@ def run(state: PMState) -> PMState:
         "bundle_id": bundle_id,
         "product_name": product_name,
         "decision": decision,
+        "decision_summary": decision_summary,
         "rationale": "\n".join(rationale_lines),
         "key_findings_count": len(findings),
+        "top_findings": top_findings,
         "next_steps": next_steps,
         "open_questions": open_questions,
         "contradictions": contradictions,
@@ -270,9 +347,20 @@ def run(state: PMState) -> PMState:
     decision_log_lines: List[str] = []
     decision_log_lines.append(f"# Decision Log — {bundle_id}\n")
     decision_log_lines.append(f"## Decision\n**{decision}**\n")
+    decision_log_lines.append("## Decision Summary\n")
+    decision_log_lines.append(decision_summary + "\n")
     decision_log_lines.append("## Rationale\n")
     decision_log_lines.extend([f"- {line}" for line in rationale_lines])
     decision_log_lines.append("")
+
+    if top_findings:
+        decision_log_lines.append("## Top Findings\n")
+        for item in top_findings:
+            decision_log_lines.append(
+                f"- [{item['id']}] {item['agent']} / {item['type']} "
+                f"(impact={item['impact']}, confidence={item['confidence']}): {item['summary']}"
+            )
+        decision_log_lines.append("")
 
     if contradictions:
         decision_log_lines.append("## Tradeoffs / Contradictions\n")
